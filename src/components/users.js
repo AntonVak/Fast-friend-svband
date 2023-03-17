@@ -48,7 +48,7 @@ const Users = ({users: allUsers, ...rest}) => {
 
   const count = filteredUsers.length;
 
-  const sortedUsers = _.orderBy(filteredUsers, [sortBy.pathg], [sortBy.order]);
+  const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
 
   //вернуть новый массив с определенным количеством юзеров
   const userCrop = paginate(sortedUsers, currentPage, pageSize)
@@ -79,7 +79,12 @@ const Users = ({users: allUsers, ...rest}) => {
       <div className="d-flex flex-column">
         <SearchStatus users={count} />
         {count > 0 && (
-          <UsersTable users={userCrop} {...rest} onSort={handleSort} selectedSort={sortBy}/>
+          <UsersTable
+            users={userCrop}
+            {...rest}
+            onSort={handleSort}
+            selectedSort={sortBy}
+          />
         )}
         <div className="d-flex justify-content-center">
           <Pagination

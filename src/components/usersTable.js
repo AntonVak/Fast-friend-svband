@@ -1,8 +1,9 @@
 import TableBody from "./tableBody";
 import TableHeader from "./tableHeader";
+import BookMark from "./bookMark";
 // import User from "./user";
 
-const UsersTable = ({ users, onSort, selectedSort, ...rest }) => {
+const UsersTable = ({ users, onSort, selectedSort, onDelete, onToggleBookMark, ...rest }) => {
   const columns = {
     name: { path: "name", name: "Name" },
     qualities: { name: "Qualities" },
@@ -12,9 +13,25 @@ const UsersTable = ({ users, onSort, selectedSort, ...rest }) => {
       name: "Number of meetings",
     },
     rate: { path: "rate", name: "Rate" },
-    bookmark: { path: "bookmark", name: "bookmark" },
-    delete: {},
+    bookmark: {
+      path: "bookmark",
+      name: "bookmark",
+      component: (user) => (
+        <BookMark
+          status={user.bookmark}
+          onClick={() => onToggleBookMark(user._id)}
+        />
+      ),
+    },
+    delete: {
+      component: (user) => (
+        <button className="btn btn-warning" onClick={() => onDelete(user._id)}>
+          Delete
+        </button>
+      ),
+    },
   };
+  
   return (
     <table className="table">
       <TableHeader {...{ onSort, selectedSort, columns }} />
