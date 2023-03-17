@@ -48,7 +48,7 @@ const Users = ({users: allUsers, ...rest}) => {
 
   const count = filteredUsers.length;
 
-  const sortedUsers = _.orderBy(filteredUsers, [sortBy.iter], [sortBy.order]);
+  const sortedUsers = _.orderBy(filteredUsers, [sortBy.pathg], [sortBy.order]);
 
   //вернуть новый массив с определенным количеством юзеров
   const userCrop = paginate(sortedUsers, currentPage, pageSize)
