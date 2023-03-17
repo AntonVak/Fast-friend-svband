@@ -8,14 +8,35 @@ import UsersTable from "./usersTable";
 import _ from "lodash";
 
 
-const Users = ({users: allUsers, ...rest}) => {
+const Users = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [professions, setProfessions] = useState();
   const [selectedProf, setSelectedProf] = useState();
-
   const [sortBy, setSortBy] = useState({iter: 'name', order: 'asc'});
 
   const pageSize = 9;
+
+  const [users, setUsers] = useState()
+  // console.log()
+
+  useEffect(() => {
+    api.users.fetchAll().then((data) => setUsers(data))
+  }, []);
+
+ const handleDelete = (userId) =>{
+  const userDel = users.filter((user) => user._id !== userId)
+  setUsers(userDel);
+ }
+ const handleToggleBookMark = (id) => {
+   setUsers(
+     users.map((user) => {
+       if (user._id === id) {
+         return { ...user, bookmark: !user.bookmark };
+       }
+       return user;
+     })
+   );
+ };
 
   useEffect(() => {
     // console.log("request")
@@ -38,13 +59,16 @@ const Users = ({users: allUsers, ...rest}) => {
     setSortBy(item)
   }
 
+  if(users) {
+
+  
   const filteredUsers = selectedProf
-        ? allUsers.filter(
+        ? users.filter(
               (user) =>
                   JSON.stringify(user.profession) ===
                   JSON.stringify(selectedProf)
           )
-        : allUsers;
+        : users;
 
   const count = filteredUsers.length;
 
@@ -81,8 +105,9 @@ const Users = ({users: allUsers, ...rest}) => {
         {count > 0 && (
           <UsersTable
             users={userCrop}
-            {...rest}
             onSort={handleSort}
+            onDelete={handleDelete}
+            onToggleBookMark={handleToggleBookMark}
             selectedSort={sortBy}
           />
         )}
@@ -97,6 +122,8 @@ const Users = ({users: allUsers, ...rest}) => {
       </div>
     </div>
   );
+        };
+        return 'Loading...'
 };
 
 export default Users;
