@@ -1,8 +1,8 @@
-import TableBody from "./tableBody";
-import TableHeader from "./tableHeader";
+import TableBody from "./common/table/tableBody";
+import TableHeader from "./common/table/tableHeader";
 import BookMark from "./bookMark";
-import QualitiesList from "./qualitiesList";
-import Table from "./table";
+import QualitiesList from "./ui/qualities/qualitiesList";
+import Table from "./common/table/table";
 import { Link } from "react-router-dom";
 
 

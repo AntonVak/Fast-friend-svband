@@ -1,17 +1,18 @@
-import FilterList from "../components/filterList";
+import FilterList from "../../common/filterList";
 import { useState, useEffect } from "react";
-import { paginate } from "../utils/pagination";
-import Pagination from "../components/pagination";
-import api from "../api";
-import SearchStatus from "../components/searchStaatus";
-import UsersTable from "../components/usersTable";
+import { paginate } from "../../../utils/pagination";
+import Pagination from "../../common/pagination";
+import api from "../../../api";
+import SearchStatus from "../../ui/searchStaatus";
+import UsersTable from "../../usersTable";
 import _ from "lodash";
 
-const Users = () => {
+const UsersListPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [professions, setProfessions] = useState();
   const [selectedProf, setSelectedProf] = useState();
   const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
+  const [searchQuery, setSearchQuery] = useState("");
 
   const pageSize = 9;
 
@@ -44,7 +45,7 @@ const Users = () => {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedProf]);
+  }, [selectedProf, searchQuery]);
 
   const handleProfessionSelect = (item) => {
     setSelectedProf(item);
@@ -58,8 +59,18 @@ const Users = () => {
     setSortBy(item);
   };
 
+  const handleSearchQuery = ({ target }) => {
+    setSelectedProf(undefined)
+    setSearchQuery(target.value);
+  };
+
   if (users) {
-    const filteredUsers = selectedProf
+    const filteredUsers = searchQuery
+      ? users.filter(
+          (user) =>
+            user.name.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1
+        )
+      : selectedProf
       ? users.filter(
           (user) =>
             JSON.stringify(user.profession) === JSON.stringify(selectedProf)
@@ -97,6 +108,13 @@ const Users = () => {
 
         <div className="d-flex flex-column">
           <SearchStatus users={count} />
+          <input
+            type="text"
+            name="searchQuery"
+            placeholder="Search..."
+            onChange={handleSearchQuery}
+            value={searchQuery}
+          />
           {count > 0 && (
             <UsersTable
               users={userCrop}
@@ -121,4 +139,4 @@ const Users = () => {
   return "Loading...";
 };
 
-export default Users;
+export default UsersListPage;
