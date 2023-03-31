@@ -1,10 +1,17 @@
 import { validator } from "../../utils/validator";
 import { useState, useEffect } from "react";
 import TextField from "../common/form/textField";
+import api from "../../api";
+import SelectField from "../common/form/selectField";
 
 const RegisterForm = () => {
-    const [data, setData] = useState({ email: "", pass: "" });
+    const [data, setData] = useState({ email: "", pass: "", profession: "" });
   const [errors, setErrors] = useState({});
+  const [professions, setProfessions] = useState();
+
+  useEffect(() => {
+    api.professions.fetchAll().then((data) => setProfessions(data));
+  }, []);
 
   const handleChange = (e) => {
     setData((prevState) => ({
@@ -37,6 +44,11 @@ const RegisterForm = () => {
         value: 8,
       },
     },
+    profession: {
+      isRequired: {
+        message: "Profession dos'n choose! "
+      }
+    }
   };
 
   const validate = () => {
@@ -75,6 +87,15 @@ const RegisterForm = () => {
         autoComplete="current-password"
         error={errors.pass}
       />
+      <SelectField
+        label="Сhoose our professions"
+        defaultOption="Choose..."
+        options={professions}
+        onChange={handleChange}
+        value={data.profession}
+        error={errors.profession}
+      />
+      
       <button type="submit" disabled={!isValid}>
         Submit
       </button>
