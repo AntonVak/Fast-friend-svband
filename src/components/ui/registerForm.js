@@ -3,20 +3,30 @@ import { useState, useEffect } from "react";
 import TextField from "../common/form/textField";
 import api from "../../api";
 import SelectField from "../common/form/selectField";
+import RadioField from "../common/form/radioField";
+import MyltiSelectField from "../common/form/myltiSelectField";
 
 const RegisterForm = () => {
-    const [data, setData] = useState({ email: "", pass: "", profession: "" });
+  const [data, setData] = useState({
+    email: "",
+    pass: "",
+    profession: "",
+    sex: "male",
+    qualities: [],
+  });
+  const [qualities, setQualities] = useState({});
   const [errors, setErrors] = useState({});
   const [professions, setProfessions] = useState();
 
   useEffect(() => {
     api.professions.fetchAll().then((data) => setProfessions(data));
+    api.qualities.fetchAll().then((data) => setQualities(data));
   }, []);
 
   const handleChange = (e) => {
     setData((prevState) => ({
       ...prevState,
-      [e.target.name]: e.target.value,
+      [e.name]: e.value,
     }));
   };
 
@@ -46,9 +56,9 @@ const RegisterForm = () => {
     },
     profession: {
       isRequired: {
-        message: "Profession dos'n choose! "
-      }
-    }
+        message: "Profession dos'n choose! ",
+      },
+    },
   };
 
   const validate = () => {
@@ -95,12 +105,27 @@ const RegisterForm = () => {
         value={data.profession}
         error={errors.profession}
       />
-      
+      <RadioField
+        options={[
+          { name: "Male", value: "male" },
+          { name: "Female", value: "female" },
+        ]}
+        onChange={handleChange}
+        value={data.sex}
+        name="sex"
+      />
+      <MyltiSelectField
+        onChange={handleChange}
+        options={qualities}
+        name="qualities"
+        label="Сhoose our qualities"
+      />
+
       <button type="submit" disabled={!isValid}>
         Submit
       </button>
     </form>
   );
-}
- 
+};
+
 export default RegisterForm;
