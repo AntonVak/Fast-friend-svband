@@ -5,6 +5,7 @@ import api from "../../api";
 import SelectField from "../common/form/selectField";
 import RadioField from "../common/form/radioField";
 import MyltiSelectField from "../common/form/myltiSelectField";
+import CheckBoxField from "../common/form/checkBoxField";
 
 const RegisterForm = () => {
   const [data, setData] = useState({
@@ -13,6 +14,8 @@ const RegisterForm = () => {
     profession: "",
     sex: "male",
     qualities: [],
+    licence: false,
+
   });
   const [qualities, setQualities] = useState({});
   const [errors, setErrors] = useState({});
@@ -120,6 +123,11 @@ const RegisterForm = () => {
         name="qualities"
         label="Сhoose our qualities"
       />
+      <CheckBoxField
+        onChange={handleChange}
+        name="licence"
+        value={data.licence}
+      >Подтвердить лицензию</CheckBoxField>
 
       <button type="submit" disabled={!isValid}>
         Submit

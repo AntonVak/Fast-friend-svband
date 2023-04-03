@@ -1,6 +1,7 @@
 import { validator } from "../../utils/validator";
 import { useState, useEffect } from "react";
 import TextField from "../common/form/textField";
+import { object, string, number, date, InferType } from 'yup';
 
 const LoginForm = () => {
   const [data, setData] = useState({ email: "", pass: "" });
@@ -12,6 +13,16 @@ const LoginForm = () => {
       [e.target.name]: e.target.value,
     }));
   };
+
+  // let userSchema = object({
+  //   email: string().required("Почта обязательна для заполнения").email("E-mail not correct"),
+  //   pass: string().required("Пароль обязателен для заполнения"),
+  //   name: string().required(),
+  //   age: number().required().positive().integer(),
+    
+  //   website: string().url().nullable(),
+  //   createdOn: date().default(() => new Date()),
+  // });
 
   const validatorConfig = {
     email: {
